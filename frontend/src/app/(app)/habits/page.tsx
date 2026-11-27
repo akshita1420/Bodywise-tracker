@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Pixel } from "@/components/Pixel";
+import SugarModal from "@/components/SugarModal";
 import { PageHead, Spinner, Tick } from "@/components/ui";
 import { api } from "@/lib/api";
 import { fmt, pretty, todayIso } from "@/lib/dates";
@@ -72,7 +73,7 @@ export default function HabitsPage() {
               <th className={`${TH} ${COL}`}><span className="flex items-center gap-2 text-sky"><Pixel name="drop" size={20} />water · {fmt(data.waterTargetL, 2)}L</span></th>
               <th className={`${TH} ${COL}`}><span className="flex items-center gap-2 text-lav"><Pixel name="dumbbell" size={20} />gym</span></th>
               <th className={`${TH} ${COL}`}><span className="flex items-center gap-2 text-pink"><Pixel name="shoe" size={20} />steps · {fmt(data.stepsTarget)}</span></th>
-              <th className={`${TH} ${COL}`}><span className="flex items-center gap-2 text-pink"><Pixel name="lollipop" size={20} />no sugar</span></th>
+              <th className={`${TH} ${COL}`}><span className="flex items-center gap-2 text-pink"><Pixel name="lollipop" size={20} />sugar</span></th>
               <th className={`${TH} ${COL}`}><span className="flex items-center gap-2 text-peach"><Pixel name="forkknife" size={20} />food</span></th>
             </tr>
           </thead>
@@ -119,6 +120,7 @@ function Row({
   onSaved: () => void;
 }) {
   const out = row.ateOut;
+  const [sugarOpen, setSugarOpen] = useState(false);
   return (
     <tr className={`anim-in border-b border-line last:border-0 ${isToday ? "bg-mustard/[0.05]" : ""}`} style={{ animationDelay: `${Math.min(i, 20) * 25}ms` }}>
       <td className="whitespace-nowrap px-3 py-2.5">
@@ -130,16 +132,28 @@ function Row({
       <Cell date={row.date} field="steps" value={row.steps} ok={row.stepsOk} fill={stepsTarget} unit="" step="500" onSaved={onSaved} />
       <td className={`px-3 py-2 ${COL}`}>
         <button
-          className="flex items-center gap-2 rounded-md px-1.5 py-1 transition hover:bg-panel-2"
-          title={row.noSugar ? "Click to undo: no sugar" : "Click if you had no added sugar today"}
-          onClick={async () => {
-            await api(`/days/${row.date}/log`, "PATCH", { noSugar: !row.noSugar });
-            onSaved();
-          }}
+          className="flex max-w-56 items-center gap-2 rounded-md px-1.5 py-1 text-left transition hover:bg-panel-2"
+          title="Sugar-free, or what sweets you had"
+          onClick={() => setSugarOpen(true)}
         >
-          <Tick ok={row.noSugar} />
-          <span className={row.noSugar ? "text-ink-2" : "text-muted/60"}>{row.noSugar ? "sugar-free" : "—"}</span>
+          {row.sugarKcal > 0 ? (
+            <>
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border-2 border-bad bg-bad/15">
+                <Pixel name="lollipop" size={16} />
+              </span>
+              <span className="min-w-0">
+                <span className="block truncate text-[13.5px] text-ink-2">{row.sugarItems.join(", ")}</span>
+                <span className="block text-[12.5px] text-bad">{row.sugarKcal} kcal</span>
+              </span>
+            </>
+          ) : (
+            <>
+              <Tick ok={row.noSugar} />
+              <span className={row.noSugar ? "text-ink-2" : "text-muted/60"}>{row.noSugar ? "sugar-free" : "log"}</span>
+            </>
+          )}
         </button>
+        {sugarOpen && <SugarModal date={row.date} onClose={() => setSugarOpen(false)} onSaved={onSaved} />}
       </td>
       <td className={`px-3 py-2 ${COL}`}>
         <button

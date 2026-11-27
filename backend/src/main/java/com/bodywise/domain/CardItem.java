@@ -8,6 +8,7 @@ import jakarta.persistence.Enumerated;
 @Embeddable
 public class CardItem {
     @Enumerated(EnumType.STRING)
+    @jakarta.persistence.Column(name = "meal_type", columnDefinition = "varchar(32)")
     public MealType mealType;
     /** The text as typed, e.g. "5 soaked almonds". */
     public String raw;

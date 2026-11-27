@@ -21,10 +21,12 @@ public class TrackController {
 
     private final Support support;
     private final DailyLogRepo logs;
+    private final com.bodywise.repo.MealEntryRepo entries;
 
-    public TrackController(Support support, DailyLogRepo logs) {
+    public TrackController(Support support, DailyLogRepo logs, com.bodywise.repo.MealEntryRepo entries) {
         this.support = support;
         this.logs = logs;
+        this.entries = entries;
     }
 
     @GetMapping("/weights")
@@ -86,6 +88,11 @@ public class TrackController {
         if (from.isBefore(earliest)) from = earliest;
         Map<LocalDate, DailyLog> byDate = new HashMap<>();
         for (DailyLog l : logs.findByUserIdAndDateBetweenOrderByDate(u.id, from, to)) byDate.put(l.date, l);
+        // Sweets logged per day (the SWEETS slot): names, calories and carbs.
+        Map<LocalDate, List<com.bodywise.domain.MealEntry>> sweets = new HashMap<>();
+        for (com.bodywise.domain.MealEntry e : entries.findByUserIdAndMealTypeAndDateBetween(u.id, com.bodywise.domain.MealType.SWEETS, from, to)) {
+            sweets.computeIfAbsent(e.date, k -> new ArrayList<>()).add(e);
+        }
 
         List<HabitRow> rows = new ArrayList<>();
         for (LocalDate d = to; !d.isBefore(from); d = d.minusDays(1)) {
@@ -95,7 +102,10 @@ public class TrackController {
             Integer g = l != null ? l.gymMinutes : null;
             rows.add(new HabitRow(d, w, s, g, w != null && w >= water, s != null && s >= steps, g != null && g > 0,
                     l != null ? l.planFollowed : null, l != null && Boolean.TRUE.equals(l.ateOut),
-                    l != null && Boolean.TRUE.equals(l.noSugar)));
+                    l != null && Boolean.TRUE.equals(l.noSugar),
+                    sweets.getOrDefault(d, List.of()).stream().map(e -> e.name).toList(),
+                    (int) Math.round(sweets.getOrDefault(d, List.of()).stream().mapToDouble(e -> e.kcal * e.quantity).sum()),
+                    Math.round(sweets.getOrDefault(d, List.of()).stream().mapToDouble(e -> e.carbs * e.quantity).sum() * 10) / 10.0));
         }
         return new HabitsResponse(water, steps, start, rows);
     }

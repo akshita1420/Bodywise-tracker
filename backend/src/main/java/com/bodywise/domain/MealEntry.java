@@ -13,7 +13,8 @@ public class MealEntry {
     public Long userId;
     @Column(name = "entry_date", nullable = false)
     public LocalDate date;
-    @Enumerated(EnumType.STRING) @Column(nullable = false)
+    // plain varchar (not a database enum) so new meal slots can be added later
+    @Enumerated(EnumType.STRING) @Column(nullable = false, columnDefinition = "varchar(32)")
     public MealType mealType;
     public Long foodId;
     @Column(nullable = false)

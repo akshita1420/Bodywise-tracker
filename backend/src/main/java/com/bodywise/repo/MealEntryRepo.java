@@ -9,4 +9,5 @@ import java.util.List;
 public interface MealEntryRepo extends JpaRepository<MealEntry, Long> {
     List<MealEntry> findByUserIdAndDateOrderById(Long userId, LocalDate date);
     List<MealEntry> findByUserIdAndDateAndMealType(Long userId, LocalDate date, MealType mealType);
+    List<MealEntry> findByUserIdAndMealTypeAndDateBetween(Long userId, MealType mealType, LocalDate from, LocalDate to);
 }

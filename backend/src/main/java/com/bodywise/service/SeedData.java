@@ -30,15 +30,18 @@ public class SeedData implements ApplicationRunner {
     private final com.bodywise.repo.UserRepo users;
     private final com.bodywise.repo.DailyLogRepo logs;
     private final java.time.Clock clock;
+    private final org.springframework.jdbc.core.JdbcTemplate jdbc;
 
     public SeedData(FoodRepo foods, FlashCardRepo cards, CardService cardService,
-                    com.bodywise.repo.UserRepo users, com.bodywise.repo.DailyLogRepo logs, java.time.Clock clock) {
+                    com.bodywise.repo.UserRepo users, com.bodywise.repo.DailyLogRepo logs, java.time.Clock clock,
+                    org.springframework.jdbc.core.JdbcTemplate jdbc) {
         this.foods = foods;
         this.cards = cards;
         this.cardService = cardService;
         this.users = users;
         this.logs = logs;
         this.clock = clock;
+        this.jdbc = jdbc;
     }
 
     private record F(String name, String unit, double kcal, double protein, double carbs, double fat, double fiber, String aliases) {}
@@ -360,12 +363,55 @@ public class SeedData implements ApplicationRunner {
         f("Tomato ketchup",             "tbsp (15 g)",            17,    0.2,  4.0,  0,    0.1, "ketchup, sauce"),
         f("Mayonnaise",                 "tbsp (15 g)",            95,    0.1,  0.1, 10.0,  0,   "mayo"),
         f("Peanut chutney",             "tbsp (15 g)",            60,    2.5,  2.0,  5.0,  0.8, "groundnut chutney, shengdana chutney"),
-        f("Imli chutney",               "tbsp (15 g)",            40,    0.1, 10.0,  0,    0.3, "tamarind chutney, saunth")
+        f("Imli chutney",               "tbsp (15 g)",            40,    0.1, 10.0,  0,    0.3, "tamarind chutney, saunth"),
+
+        // --- sweets & desserts (logged from the habits "sugar" column, or any meal)
+        f("Chocolate brownie",          "piece (60 g)",          250,    3.0, 33.0, 12.0,  1.5, "brownie, brownies, walnut brownie, fudge brownie"),
+        f("Chocolate chip cookie",      "piece (25 g)",          120,    1.4, 16.0,  6.0,  0.6, "cookie, cookies, choco chip cookie"),
+        f("Butter cookie",              "piece (10 g)",           50,    0.6,  6.5,  2.5,  0.2, "butter biscuit, nankhatai"),
+        f("Cream biscuit",              "piece (12 g)",           60,    0.6,  8.5,  2.6,  0.2, "bourbon, oreo, cream biscuits"),
+        f("Chocolate cake",             "slice (80 g)",          320,    4.0, 42.0, 16.0,  1.8, "cake, cake slice, birthday cake, black forest"),
+        f("Cheesecake",                 "slice (100 g)",         320,    5.5, 26.0, 22.0,  0.4, ""),
+        f("Cupcake",                    "piece",                 240,    2.5, 35.0, 10.0,  0.5, "cup cake"),
+        f("Muffin",                     "piece",                 340,    5.0, 50.0, 14.0,  1.5, "chocolate muffin, blueberry muffin"),
+        f("Pastry",                     "piece",                 280,    3.5, 35.0, 14.0,  0.6, "cream pastry, pineapple pastry"),
+        f("Donut",                      "piece",                 260,    3.5, 31.0, 14.0,  1.0, "doughnut, glazed donut"),
+        f("Waffle with syrup",          "piece",                 300,    6.0, 45.0, 11.0,  1.0, "waffle, waffles"),
+        f("Pancakes with syrup",        "2 pancakes",            350,    7.0, 60.0,  9.0,  1.5, "pancake, pancakes"),
+        f("Milk chocolate",             "bar (40 g)",            215,    3.0, 24.0, 12.0,  1.0, "dairy milk, chocolate bar, kitkat, five star"),
+        f("Tiramisu",                   "piece (100 g)",         280,    5.0, 28.0, 16.0,  0.3, ""),
+        f("Chocolate milkshake",        "glass (300 ml)",        330,    9.0, 50.0, 10.0,  1.0, "milkshake, shake, oreo shake"),
+        f("Candy",                      "piece (5 g)",            20,    0,    5.0,  0,    0,   "toffee, eclairs, lollipop, gummy, gummies"),
+        f("Rasmalai",                   "piece",                 190,    6.0, 24.0,  7.5,  0,   "ras malai"),
+        f("Kulfi",                      "stick (70 g)",          200,    4.5, 22.0, 10.0,  0,   "malai kulfi"),
+        f("Motichoor ladoo",            "piece",                 175,    2.5, 24.0,  8.0,  0.5, "boondi ladoo"),
+        f("Peda",                       "piece",                 110,    2.5, 16.0,  4.0,  0,   "doodh peda, mathura peda"),
+        f("Sandesh",                    "piece",                  90,    3.0, 12.0,  3.5,  0,   "sondesh"),
+        f("Mysore pak",                 "piece",                 190,    1.5, 18.0, 12.5,  0.5, ""),
+        f("Soan papdi",                 "piece (25 g)",          120,    1.5, 16.0,  6.0,  0.4, "son papdi, soan papri"),
+        f("Kalakand",                   "piece",                 150,    4.5, 17.0,  7.0,  0,   ""),
+        f("Malpua",                     "piece",                 220,    3.5, 30.0, 10.0,  0.5, ""),
+        f("Modak",                      "piece",                 130,    2.0, 20.0,  5.0,  1.0, "ukadiche modak"),
+        f("Chikki",                     "piece (25 g)",          125,    3.5, 14.0,  6.5,  1.0, "peanut chikki, gajak"),
+        f("Rabri",                      "bowl (100 g)",          250,    7.0, 30.0, 11.0,  0,   "rabdi"),
+        f("Moong dal halwa",            "bowl (100 g)",          400,    7.0, 42.0, 22.0,  2.0, ""),
+        f("Coconut ladoo",              "piece",                 120,    1.0, 13.0,  7.5,  1.5, "nariyal ladoo"),
+        f("Sugar in tea",               "tsp (4 g)",              16,    0,    4.0,  0,    0,   "extra sugar, sugar in coffee"),
+        f("Mithai (assorted)",          "piece",                 150,    2.5, 20.0,  7.0,  0.3, "mithai, sweet, indian sweet")
     );
 
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
+        // Older databases stored meal slots as a fixed enum column; turn them into plain text so new
+        // slots (like SWEETS) fit. Harmless if already varchar or the table doesn't exist.
+        for (String table : List.of("meal_entry", "day_card_item", "day_card_text")) {
+            try {
+                jdbc.execute("ALTER TABLE " + table + " ALTER COLUMN meal_type SET DATA TYPE VARCHAR(32)");
+            } catch (Exception ignored) {
+                // table missing or already fine
+            }
+        }
         // Drop built-in foods that are no longer in the catalog (diary entries keep their own copy of the numbers).
         java.util.Set<String> names = new java.util.HashSet<>();
         for (F x : CATALOG) names.add(x.name().toLowerCase());

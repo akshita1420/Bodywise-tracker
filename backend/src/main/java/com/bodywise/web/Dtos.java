@@ -157,7 +157,7 @@ public final class Dtos {
     // ---- habits
     public record HabitRow(LocalDate date, Double waterLiters, Integer steps, Integer gymMinutes,
                            boolean waterOk, boolean stepsOk, boolean gymOk, Boolean planFollowed, boolean ateOut,
-                           boolean noSugar) {}
+                           boolean noSugar, List<String> sugarItems, int sugarKcal, double sugarCarbs) {}
     public record HabitsResponse(double waterTargetL, int stepsTarget, LocalDate startDate, List<HabitRow> rows) {}
 
     // ---- grocery

@@ -101,6 +101,14 @@ public class GroceryController {
         items.delete(ownItem(jwt, id));
     }
 
+    /** The 7 pm email as HTML, for previewing in the app. */
+    @GetMapping(value = "/email-preview", produces = "text/html;charset=UTF-8")
+    public String emailPreview(@AuthenticationPrincipal Jwt jwt,
+                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        var u = support.user(jwt);
+        return reminders.html(u, grocery.view(u.id, date != null ? date : support.today().plusDays(1)));
+    }
+
     /** "Send me the list now": the same email the 7 pm job sends. */
     @PostMapping("/send-now")
     public SendResult sendNow(@AuthenticationPrincipal Jwt jwt) {

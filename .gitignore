@@ -16,8 +16,12 @@ frontend/AGENTS.md
 
 # env & os
 .env*
+!.env.example
 .DS_Store
 Thumbs.db
 *.log
 .idea/
 .vscode/
+
+# server-side database folder used by docker-compose
+/data/

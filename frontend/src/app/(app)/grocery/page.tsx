@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { PageHead, PanelTitle, Spinner } from "@/components/ui";
-import { api } from "@/lib/api";
+import { api, getToken } from "@/lib/api";
+import Portal from "@/components/Portal";
 import { addDays, pretty, todayIso } from "@/lib/dates";
 import Link from "next/link";
 import type { Card, GList, GroceryView } from "@/lib/types";
@@ -14,6 +15,7 @@ export default function GroceryPage() {
   const [data, setData] = useState<GroceryView | null>(null);
   const [newList, setNewList] = useState("");
   const [sendMsg, setSendMsg] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   useEffect(() => setDate(addDays(todayIso(), 1)), []);
 
@@ -77,7 +79,34 @@ export default function GroceryPage() {
         >
           send now
         </button>
+        <button
+          className="btn-ghost"
+          onClick={async () => {
+            const res = await fetch(`/api/grocery/email-preview?date=${date}`, { headers: { Authorization: `Bearer ${getToken()}` } });
+            setPreview(await res.text());
+          }}
+        >
+          preview email
+        </button>
       </div>
+
+      {preview && (
+        <Portal>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-6" role="dialog" aria-modal="true">
+            <div className="anim-fade absolute inset-0 bg-black/70" onClick={() => setPreview(null)} />
+            <div className="anim-in relative flex h-full w-full max-w-2xl flex-col border-2 border-line-2 bg-panel sm:h-[90vh] sm:rounded-2xl">
+              <div className="flex items-center border-b-2 border-line px-5 py-3">
+                <span className="font-pixel text-[20px] text-pink">email preview</span>
+                <span className="ml-3 text-[13px] text-muted">what the 7 pm email looks like</span>
+                <button className="ml-auto text-[22px] text-muted hover:text-ink" onClick={() => setPreview(null)} aria-label="Close">
+                  ×
+                </button>
+              </div>
+              <iframe title="email preview" srcDoc={preview} sandbox="" className="w-full flex-1 bg-bg sm:rounded-b-2xl" />
+            </div>
+          </div>
+        </Portal>
+      )}
 
       <div className="grid gap-5 lg:grid-cols-3">
         <section className="card anim-in p-5 lg:col-span-2 lg:row-span-2">

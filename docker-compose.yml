@@ -1,0 +1,24 @@
+# Production: docker compose up -d --build   (settings in .env next to this file, see .env.example)
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_URL: jdbc:h2:file:/app/data/bodywise
+    volumes:
+      - ./data:/app/data
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        BACKEND_URL: http://backend:8080
+    restart: unless-stopped
+    environment:
+      BACKEND_URL: http://backend:8080
+    depends_on:
+      - backend
+    ports:
+      # only reachable from the server itself; nginx forwards the public domain here
+      - "127.0.0.1:${FRONTEND_PORT:-3010}:3000"

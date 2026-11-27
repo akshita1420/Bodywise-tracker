@@ -5,10 +5,11 @@ export type MealType =
   | "LUNCH"
   | "TEA_TIME"
   | "DINNER"
-  | "POST_DINNER";
+  | "POST_DINNER"
+  | "SWEETS";
 
 /** sprite = pixel icon name (see components/pixelArt.ts); color = accent for that meal. */
-export const MEALS: { type: MealType; label: string; time: string; sprite: "sun" | "bowl" | "apple" | "cup" | "moon" | "star"; color: string; swap?: Record<string, string> }[] = [
+export const MEALS: { type: MealType; label: string; time: string; sprite: "sun" | "bowl" | "apple" | "cup" | "moon" | "star" | "lollipop"; color: string; swap?: Record<string, string> }[] = [
   { type: "EARLY_MORNING", label: "Early morning", time: "06:30", sprite: "sun", color: "#f5c542" },
   { type: "BREAKFAST", label: "Breakfast", time: "08:30", sprite: "bowl", color: "#ffa66b" },
   { type: "MID_MORNING", label: "Mid morning", time: "11:00", sprite: "apple", color: "#ff8fb8" },
@@ -16,6 +17,7 @@ export const MEALS: { type: MealType; label: string; time: string; sprite: "sun"
   { type: "TEA_TIME", label: "Tea time", time: "17:00", sprite: "cup", color: "#ffa66b" },
   { type: "DINNER", label: "Dinner", time: "20:00", sprite: "moon", color: "#b8a1ff" },
   { type: "POST_DINNER", label: "Post dinner", time: "22:00", sprite: "star", color: "#79c4ff" },
+  { type: "SWEETS", label: "Sweets & sugar", time: "any", sprite: "lollipop", color: "#ff6b81" },
 ];
 
 export const mealLabel = (t: MealType) => MEALS.find((m) => m.type === t)?.label ?? t;
@@ -194,6 +196,10 @@ export interface HabitRow {
   planFollowed: boolean | null;
   ateOut: boolean;
   noSugar: boolean;
+  /** sweets logged that day (SWEETS slot) */
+  sugarItems: string[];
+  sugarKcal: number;
+  sugarCarbs: number;
 }
 
 export interface HabitsResponse {

@@ -26,7 +26,7 @@ public class FlashCard {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "day_card_text", joinColumns = @JoinColumn(name = "card_id"))
     @MapKeyEnumerated(EnumType.STRING)
-    @MapKeyColumn(name = "meal_type")
+    @MapKeyColumn(name = "meal_type", columnDefinition = "varchar(32)")
     @Column(name = "text", length = 2000)
     public Map<MealType, String> mealText = new EnumMap<>(MealType.class);
 
