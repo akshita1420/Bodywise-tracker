@@ -156,12 +156,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** Pink pixel logo: a heart with a heartbeat line, plus the wordmark (same mark as the favicon). */
+/** Pink pixel logo: a leaf slanting like "/", plus the wordmark (same mark as the favicon). */
 export function Logo({ small = false }: { small?: boolean }) {
   return (
     <span className="flex items-center gap-2">
       <span className="pixel-bob">
-        <Pixel name="pulseHeart" size={small ? 26 : 34} title="bodywise" />
+        <Pixel name="logoLeaf" size={small ? 26 : 34} title="bodywise" />
       </span>
       <span className={`font-pixel leading-none text-pink ${small ? "text-[20px]" : "text-[27px]"}`}>bodywise</span>
     </span>

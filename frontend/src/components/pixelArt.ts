@@ -244,7 +244,26 @@ export const SPRITES = {
     "............",
   ],
   lollipop: sym(["......", "..oooo", ".oprpr", "oprprp", "orprpr", "oprprp", ".oprpr", "..oooo", ".....o", ".....o", ".....o", "......"]),
-  // 16 × 16 logo + favicon: hot-pink heart with a white heartbeat line
+  // 16 × 16 logo + favicon: pink leaf slanting like "/", light-pink midrib, stem at bottom-left
+  logoLeaf: [
+    "................",
+    "...........oooo.",
+    "........ooommmo.",
+    "......oommmmpmo.",
+    ".....ommmmmpmmo.",
+    "....ommmmmpmmmo.",
+    "...ommmmmpmmmo..",
+    "...ommmmpmmmmo..",
+    "..ommmmpmmmmo...",
+    "..ommmpmmmmo....",
+    "..ommpmmmmo.....",
+    "..ompmmmoo......",
+    "..opmooo........",
+    ".opo............",
+    "op..............",
+    "................",
+  ],
+  // 16 × 16 pink heart with a white heartbeat line (previous logo, kept for later)
   pulseHeart: [
     "................",
     ".oooo......oooo.",

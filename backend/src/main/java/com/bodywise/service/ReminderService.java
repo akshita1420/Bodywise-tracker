@@ -129,14 +129,14 @@ public class ReminderService {
             MealType.POST_DINNER, new String[]{"Post dinner", "#79c4ff"},
             MealType.SWEETS, new String[]{"Sweets", "#ff8fb8"});
 
-    /** The bodywise logo (pink heart with a heartbeat line, same as the favicon), drawn as a table of coloured cells. */
+    /** The bodywise logo (pink leaf slanting like "/", same as the favicon), drawn as a table of coloured cells. */
     private static final String[] LOGO = {
-        "................", ".oooo......oooo.", "ommmmo....ommmmo", "ommmmmoooommmmmo",
-        "ommmmmmwmmmmmmmo", "ommmmmwmwmmmmmmo", "owwwwwmmwmwwwwwo", ".ommmmmmmwmmmmo.",
-        "..ommmmmmmmmmo..", "...ommmmmmmmo...", "....ommmmmmo....", ".....ommmmo.....",
-        "......ommo......", ".......oo.......",
+        "................", "...........oooo.", "........ooommmo.", "......oommmmpmo.",
+        ".....ommmmmpmmo.", "....ommmmmpmmmo.", "...ommmmmpmmmo..", "...ommmmpmmmmo..",
+        "..ommmmpmmmmo...", "..ommmpmmmmo....", "..ommpmmmmo.....", "..ompmmmoo......",
+        "..opmooo........", ".opo............", "op..............",
     };
-    private static final Map<Character, String> LOGO_COLORS = Map.of('o', "#f6eedc", 'm', "#ff4f9a", 'w', "#ffffff");
+    private static final Map<Character, String> LOGO_COLORS = Map.of('o', "#f6eedc", 'm', "#ff4f9a", 'p', "#ff9ec7");
 
     private static String pixelLogo(int px) {
         StringBuilder sb = new StringBuilder("<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse\">");

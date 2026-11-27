@@ -22,9 +22,13 @@ public class GroceryService {
     private final UserRepo users;
     private final FoodRepo foods;
     private final String mailHost;
+    private final String mailUser;
+    private final String mailPassword;
 
     public GroceryService(PlanService planService, GroceryListRepo lists, GroceryItemRepo items,
-                          PlanGroceryCheckRepo checks, UserRepo users, FoodRepo foods, @Value("${spring.mail.host:}") String mailHost) {
+                          PlanGroceryCheckRepo checks, UserRepo users, FoodRepo foods, @Value("${spring.mail.host:}") String mailHost,
+                          @Value("${spring.mail.username:}") String mailUser,
+                          @Value("${spring.mail.password:}") String mailPassword) {
         this.planService = planService;
         this.lists = lists;
         this.items = items;
@@ -32,10 +36,17 @@ public class GroceryService {
         this.users = users;
         this.foods = foods;
         this.mailHost = mailHost;
+        this.mailUser = mailUser;
+        this.mailPassword = mailPassword;
     }
 
     public boolean mailConfigured() {
-        return mailHost != null && !mailHost.isBlank();
+        // all three are needed to log in to the mail server; otherwise the email is only written to the log
+        return notBlank(mailHost) && notBlank(mailUser) && notBlank(mailPassword);
+    }
+
+    private static boolean notBlank(String s) {
+        return s != null && !s.isBlank();
     }
 
     public static String key(String name, String unit) {
