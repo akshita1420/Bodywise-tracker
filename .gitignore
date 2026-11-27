@@ -1,0 +1,23 @@
+# local tool settings
+.claude/
+
+# backend: build output and the local H2 database (personal data, never commit)
+backend/target/
+backend/data/
+*.mv.db
+*.trace.db
+
+# frontend: dependencies, build output, generated helper file
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/next-env.d.ts
+frontend/AGENTS.md
+
+# env & os
+.env*
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
