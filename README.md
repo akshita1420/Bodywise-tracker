@@ -51,18 +51,3 @@ Data is stored in `backend/data/` (H2, git-ignored). Delete that folder to start
 
 Food values in the built-in catalog (~290 foods) are typical per-serving estimates for home-style Indian cooking, based on standard reference values (India's IFCT 2017 food tables from NIN, and USDA FoodData Central for raw ingredients), assuming about 1 tsp of oil per serving of sabzi or dal. Expect ±10–20% versus your kitchen. For packaged food, use the label: type the item, click "define", and enter the label values (and ingredients, for the grocery list) once.
 
-## 7 pm grocery email
-
-Set these before starting the backend (Gmail needs an [app password](https://myaccount.google.com/apppasswords)):
-
-```bash
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=you@gmail.com
-MAIL_PASSWORD=your-16-char-app-password
-```
-
-Without `MAIL_HOST` the email is only written to the backend log. "Send now" on the Grocery page triggers it on demand.
-
-Other settings: `APP_TIMEZONE` (default `Asia/Kolkata`, decides when 7 pm is), `REMINDER_CRON` (default `0 0 19 * * *`),
-`JWT_SECRET` (32+ chars, set it for anything beyond local use), `FRONTEND_URL`, `DB_URL` / `DB_USER` / `DB_PASSWORD`.
