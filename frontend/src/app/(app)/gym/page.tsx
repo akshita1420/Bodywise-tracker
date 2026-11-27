@@ -160,11 +160,18 @@ function AddExercise({ date, day, catalog, onAdded }: { date: string; day: GymDa
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
+  const [group, setGroup] = useState("All");
+  const groups = useMemo(() => ["All", ...Array.from(new Set(catalog.map((c) => c.group)))], [catalog]);
   const match = catalog.find((c) => c.name.toLowerCase() === name.trim().toLowerCase());
+  /** Typing searches every group (each word must appear); otherwise show the chosen group. */
   const suggestions = useMemo(() => {
-    const q = name.trim().toLowerCase();
-    return catalog.filter((c) => !q || c.name.toLowerCase().includes(q)).slice(0, 12);
-  }, [catalog, name]);
+    const words = name.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    return catalog.filter((c) => {
+      const hay = `${c.name} ${c.group} ${c.tip}`.toLowerCase();
+      if (words.length) return words.every((w) => hay.includes(w));
+      return group === "All" || c.group === group;
+    });
+  }, [catalog, name, group]);
 
   const met = (match?.met ?? 5) * FACTOR[intensity];
   const mins = kind === "STRENGTH" ? (Number(minutes) > 0 ? Number(minutes) : strengthMinutes(Number(sets) || 0, Number(reps) || 0)) : Number(minutes) || 0;
@@ -201,11 +208,30 @@ function AddExercise({ date, day, catalog, onAdded }: { date: string; day: GymDa
     <section className="card anim-in relative z-10 p-5">
       <PanelTitle icon="dumbbell">add exercise</PanelTitle>
 
+      <div className="mb-3 flex flex-wrap gap-1.5">
+        {groups.map((g) => (
+          <button
+            key={g}
+            type="button"
+            onClick={() => {
+              setGroup(g);
+              setName("");
+              setOpen(true);
+            }}
+            className={`rounded-full border-2 px-2.5 py-0.5 text-[12.5px] transition ${
+              group === g ? "border-mustard bg-mustard/15 text-mustard" : "border-line text-muted hover:border-line-2 hover:text-ink"
+            }`}
+          >
+            {g}
+          </button>
+        ))}
+      </div>
+
       <div ref={box} className="relative">
         <span className="label">exercise</span>
         <input
           className="input mt-1.5 w-full"
-          placeholder="squats, bench press, treadmill, cycling…"
+          placeholder="search, or pick a group above (e.g. incline press, leg curl, rowing)"
           value={name}
           onFocus={() => setOpen(true)}
           onChange={(e) => {
@@ -216,29 +242,46 @@ function AddExercise({ date, day, catalog, onAdded }: { date: string; day: GymDa
           }}
         />
         {open && suggestions.length > 0 && (
-          <ul className="anim-fade absolute z-30 mt-1 max-h-64 w-full overflow-auto rounded-lg border-2 border-line-2 bg-panel-2 py-1 shadow-[4px_4px_0_0_rgb(0_0_0/0.5)]">
-            {suggestions.map((c) => (
+          <ul className="anim-fade absolute z-30 mt-1 max-h-80 w-full overflow-auto rounded-lg border-2 border-line-2 bg-panel-2 py-1 shadow-[4px_4px_0_0_rgb(0_0_0/0.5)]">
+            {suggestions.map((c, i) => (
               <li key={c.name}>
+                {(i === 0 || suggestions[i - 1].group !== c.group) && (
+                  <div className="sticky top-0 bg-panel-2 px-3 pb-1 pt-2 font-pixel text-[14px] text-mustard">{c.group}</div>
+                )}
                 <button
                   type="button"
-                  className="flex w-full items-center gap-2 px-3 py-1.5 text-left transition hover:bg-line"
+                  className="flex w-full items-start gap-2 px-3 py-1.5 text-left transition hover:bg-line"
                   onClick={() => {
                     setName(c.name);
                     setKind(c.kind);
                     setOpen(false);
                   }}
                 >
-                  <span className={c.kind === "STRENGTH" ? "text-lav" : "text-sky"}>
+                  <span className={`mt-0.5 ${c.kind === "STRENGTH" ? "text-lav" : "text-sky"}`}>
                     <Pixel name={c.kind === "STRENGTH" ? "dumbbell" : "shoe"} size={16} />
                   </span>
-                  <span className="flex-1 text-ink">{c.name}</span>
-                  <span className="text-[12.5px] text-muted">{c.kind === "STRENGTH" ? "sets × reps" : "minutes"} · MET {c.met}</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-ink">{c.name}</span>
+                    <span className="block truncate text-[12px] text-muted">{c.tip}</span>
+                  </span>
+                  <span className="shrink-0 text-[12px] text-muted">{c.kind === "STRENGTH" ? "sets × reps" : "minutes"} · MET {c.met}</span>
                 </button>
               </li>
             ))}
           </ul>
         )}
+        {open && suggestions.length === 0 && name.trim() && (
+          <div className="absolute z-30 mt-1 w-full rounded-lg border-2 border-line-2 bg-panel-2 px-3 py-2 text-[13px] text-muted">
+            Not in the list. You can still add it (MET 5, moderate, is assumed).
+          </div>
+        )}
       </div>
+
+      {match && (
+        <p className="anim-fade mt-2 text-[13px] text-muted">
+          <span className="text-mustard">{match.group}</span> · {match.tip}
+        </p>
+      )}
 
       <div className="mt-4 grid grid-cols-2 gap-1 rounded-lg border-2 border-line bg-bg p-1">
         {(["STRENGTH", "TIME"] as const).map((k) => (

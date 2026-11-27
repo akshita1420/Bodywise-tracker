@@ -34,7 +34,7 @@ public class GymController {
 
     @GetMapping("/exercises")
     public List<ExerciseDto> exercises() {
-        return GymService.CATALOG.stream().map(e -> new ExerciseDto(e.name(), e.kind(), e.met())).toList();
+        return GymService.CATALOG.stream().map(e -> new ExerciseDto(e.group(), e.name(), e.kind(), e.met(), e.tip())).toList();
     }
 
     @GetMapping("/days/{date}/gym")

@@ -180,7 +180,7 @@ public final class Dtos {
     public record SendResult(boolean sent, String message) {}
 
     // ---- gym
-    public record ExerciseDto(String name, String kind, double met) {}
+    public record ExerciseDto(String group, String name, String kind, double met, String tip) {}
     public record GymEntryDto(Long id, String name, String kind, Integer sets, Integer reps, Double weightKg,
                               double minutes, String intensity, double met, int kcal) {
         static GymEntryDto of(GymEntry e) {

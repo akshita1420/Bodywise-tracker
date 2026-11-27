@@ -242,6 +242,8 @@ export interface GroceryView {
 }
 
 export interface Exercise {
+  group: string;
+  tip: string;
   name: string;
   kind: "STRENGTH" | "TIME";
   met: number;
