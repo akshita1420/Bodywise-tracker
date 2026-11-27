@@ -20,6 +20,7 @@ export const PALETTE: Record<string, string> = {
   w: "#fff8ea",
   k: "#15171c",
   x: "#8b949e",
+  m: "#ff4f9a",
 };
 
 const sym = (halves: string[]) => halves.map((h) => h + [...h].reverse().join(""));
@@ -243,7 +244,26 @@ export const SPRITES = {
     "............",
   ],
   lollipop: sym(["......", "..oooo", ".oprpr", "oprprp", "orprpr", "oprprp", ".oprpr", "..oooo", ".....o", ".....o", ".....o", "......"]),
-  // 16 × 16 favicon mark: mint heart with a white plus
+  // 16 × 16 logo + favicon: hot-pink heart with a white heartbeat line
+  pulseHeart: [
+    "................",
+    ".oooo......oooo.",
+    "ommmmo....ommmmo",
+    "ommmmmoooommmmmo",
+    "ommmmmmwmmmmmmmo",
+    "ommmmmwmwmmmmmmo",
+    "owwwwwmmwmwwwwwo",
+    ".ommmmmmmwmmmmo.",
+    "..ommmmmmmmmmo..",
+    "...ommmmmmmmo...",
+    "....ommmmmmo....",
+    ".....ommmmo.....",
+    "......ommo......",
+    ".......oo.......",
+    "................",
+    "................",
+  ],
+  // 16 × 16 mint heart with a white plus (unused, kept for later)
   healthHeart: sym([
     "........",
     ".oooo...",

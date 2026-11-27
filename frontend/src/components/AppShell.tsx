@@ -156,15 +156,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** Pink pixel logo: the cat in pink plus the wordmark. */
+/** Pink pixel logo: a heart with a heartbeat line, plus the wordmark (same mark as the favicon). */
 export function Logo({ small = false }: { small?: boolean }) {
   return (
     <span className="flex items-center gap-2">
-      <Pixel name="cat" size={small ? 26 : 34} swap={LOGO_SWAP} title="bodywise" />
+      <span className="pixel-bob">
+        <Pixel name="pulseHeart" size={small ? 26 : 34} title="bodywise" />
+      </span>
       <span className={`font-pixel leading-none text-pink ${small ? "text-[20px]" : "text-[27px]"}`}>bodywise</span>
     </span>
   );
 }
-
-/** cat sprite recoloured pink for the logo / favicon */
-export const LOGO_SWAP = { y: "#ff8fb8", p: "#ff4f9a", w: "#ffffff" };

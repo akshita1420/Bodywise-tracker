@@ -129,21 +129,21 @@ public class ReminderService {
             MealType.POST_DINNER, new String[]{"Post dinner", "#79c4ff"},
             MealType.SWEETS, new String[]{"Sweets", "#ff8fb8"});
 
-    /** The pink bodywise cat (left halves, mirrored), drawn as a table of coloured cells. */
-    private static final String[] CAT = {
-        "........", ".oo.....", ".oyo....", ".oyyo...", ".oypyooo", ".oyyyyyy", "oyyyyyyy", "oyykkyyy",
-        "oyykwyyy", "oyyyyyyy", "oppyyyyk", "oyyyyyyy", ".oyyyyyy", "..oooooo", "..oyo...", "..ooo...",
+    /** The bodywise logo (pink heart with a heartbeat line, same as the favicon), drawn as a table of coloured cells. */
+    private static final String[] LOGO = {
+        "................", ".oooo......oooo.", "ommmmo....ommmmo", "ommmmmoooommmmmo",
+        "ommmmmmwmmmmmmmo", "ommmmmwmwmmmmmmo", "owwwwwmmwmwwwwwo", ".ommmmmmmwmmmmo.",
+        "..ommmmmmmmmmo..", "...ommmmmmmmo...", "....ommmmmmo....", ".....ommmmo.....",
+        "......ommo......", ".......oo.......",
     };
-    private static final Map<Character, String> CAT_COLORS = Map.of(
-            'o', "#f6eedc", 'y', "#ff8fb8", 'p', "#ff4f9a", 'k', "#15171c", 'w', "#ffffff");
+    private static final Map<Character, String> LOGO_COLORS = Map.of('o', "#f6eedc", 'm', "#ff4f9a", 'w', "#ffffff");
 
-    private static String pixelCat(int px) {
+    private static String pixelLogo(int px) {
         StringBuilder sb = new StringBuilder("<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse\">");
-        for (String half : CAT) {
-            String row = half + new StringBuilder(half).reverse();
+        for (String row : LOGO) {
             sb.append("<tr>");
             for (char c : row.toCharArray()) {
-                String color = CAT_COLORS.get(c);
+                String color = LOGO_COLORS.get(c);
                 sb.append("<td width=\"").append(px).append("\" height=\"").append(px).append("\" style=\"width:").append(px)
                   .append("px;height:").append(px).append("px;padding:0;font-size:0;line-height:0;")
                   .append(color != null ? "background:" + color + ";" : "").append("\"></td>");
@@ -181,7 +181,7 @@ public class ReminderService {
 
         // header
         b.append("<tr><td style=\"padding:22px 24px 8px;\"><table cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>")
-         .append("<td valign=\"middle\" style=\"padding-right:14px;\">").append(pixelCat(3)).append("</td>")
+         .append("<td valign=\"middle\" style=\"padding-right:14px;\">").append(pixelLogo(3)).append("</td>")
          .append("<td valign=\"middle\"><div style=\"").append(font).append("font-size:28px;font-weight:bold;color:").append(PINK).append(";letter-spacing:1px;\">bodywise</div>")
          .append("<div style=\"").append(font).append("font-size:13px;color:").append(MUTED).append(";\">$ grocery --for tomorrow</div></td>")
          .append("</tr></table></td></tr>");
@@ -237,7 +237,7 @@ public class ReminderService {
          .append(";color:#15171c;text-decoration:none;font-weight:bold;font-size:15px;padding:12px 22px;border:3px solid #15171c;border-radius:8px;box-shadow:4px 4px 0 #000;").append(font).append("\">")
          .append("&#9654; tick them off</a></td></tr>")
          .append("<tr><td align=\"center\" style=\"padding:6px 24px 22px;font-size:12px;color:").append(MUTED).append(";\">")
-         .append("sent by your bodywise cat every evening at 7 pm &middot; turn it off in profile</td></tr>")
+         .append("sent by bodywise every evening at 7 pm &middot; turn it off in profile</td></tr>")
          .append("</table></td></tr></table></body></html>");
         return b.toString();
     }
