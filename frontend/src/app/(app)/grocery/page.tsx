@@ -57,14 +57,44 @@ export default function GroceryPage() {
         <span className="grid h-10 w-10 place-items-center rounded-lg bg-mustard/15 text-mustard">✉</span>
         <div className="min-w-60 flex-1 text-[14px]">
           <p className="text-ink">
-            cron <span className="text-mustard">0 0 19 * * *</span> · daily at 7:00 pm
+            7 pm checklist email ·{" "}
+            {data.remindersEnabled ? <span className="text-ok">on</span> : <span className="text-bad">off</span>}
           </p>
           <p className="text-muted">
-            next day&apos;s list → <span className="text-ink-2">{data.reminderEmail}</span>
-            {!data.mailConfigured && <span className="text-mustard"> · email not configured on the server yet (see README), so it&apos;s only logged</span>}
+            {data.remindersEnabled ? (
+              <>
+                every evening, the next day&apos;s list → <span className="text-ink-2">{data.reminderEmail}</span>
+              </>
+            ) : (
+              "you won't get the evening email. turn it back on any time."
+            )}
+            {data.remindersEnabled && !data.mailConfigured && (
+              <span className="text-mustard"> · sending isn&apos;t set up on the server yet (Gmail app password missing), so it&apos;s only logged</span>
+            )}
           </p>
           {sendMsg && <p className="anim-fade mt-1 text-ink-2">› {sendMsg}</p>}
         </div>
+        <button
+          role="switch"
+          aria-checked={data.remindersEnabled}
+          title={data.remindersEnabled ? "Stop the 7 pm emails" : "Turn the 7 pm emails back on"}
+          className={`relative h-8 w-16 shrink-0 rounded-full border-2 transition ${
+            data.remindersEnabled ? "border-ok/60 bg-ok/25" : "border-line-2 bg-bg"
+          }`}
+          onClick={async () => {
+            await api("/profile/reminders", "PATCH", { enabled: !data.remindersEnabled });
+            setSendMsg(data.remindersEnabled ? "emails stopped" : "emails turned on");
+            load();
+          }}
+        >
+          <span
+            className={`absolute top-1/2 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-full text-[11px] font-bold transition-all ${
+              data.remindersEnabled ? "left-[34px] bg-ok text-bg" : "left-0.5 bg-line-2 text-muted"
+            }`}
+          >
+            {data.remindersEnabled ? "on" : "off"}
+          </span>
+        </button>
         <button
           className="btn-ghost"
           onClick={async () => {

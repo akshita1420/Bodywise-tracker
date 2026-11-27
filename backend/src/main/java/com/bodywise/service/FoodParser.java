@@ -89,6 +89,14 @@ public class FoodParser {
                 best = f;
             }
         }
+        if (best == null || bestScore < 0.5) {
+            // Half-typed words: "cori" → Coriander seed water. Shown as a closest match (≈), not exact.
+            Food partial = prefixMatch(q, catalog);
+            if (partial != null) {
+                best = partial;
+                bestScore = 0.6;
+            }
+        }
         if (best == null || bestScore < 0.5) return new Parsed(raw, cleanName(name), null, number, null, false);
 
         double qty = number;
@@ -105,6 +113,36 @@ public class FoodParser {
         qty = Math.round(qty * 100) / 100.0;
         if (qty <= 0) qty = 1;
         return new Parsed(raw, cleanName(name), best, qty, note, bestScore < 0.95);
+    }
+
+    /**
+     * Every typed word (3+ letters for a single word) is the start of a word in the food's name or
+     * aliases. Picks the shortest such name, so "cori" prefers "Coriander seed water" over longer ones.
+     */
+    private static Food prefixMatch(String q, List<Food> catalog) {
+        String[] qt = q.split(" ");
+        if (q.isBlank() || (qt.length == 1 && qt[0].length() < 3)) return null;
+        Food best = null;
+        int bestLen = Integer.MAX_VALUE;
+        for (Food f : catalog) {
+            List<String> names = new ArrayList<>();
+            names.add(normalize(f.name));
+            if (f.aliases != null) for (String a : f.aliases.split(",")) if (!a.isBlank()) names.add(normalize(a));
+            for (String n : names) {
+                String[] nt = n.split(" ");
+                boolean all = true;
+                for (String w : qt) {
+                    boolean hit = false;
+                    for (String t : nt) if (t.startsWith(w)) { hit = true; break; }
+                    if (!hit) { all = false; break; }
+                }
+                if (all && n.length() < bestLen) {
+                    bestLen = n.length();
+                    best = f;
+                }
+            }
+        }
+        return best;
     }
 
     private static double score(String q, Food f) {

@@ -129,14 +129,14 @@ public class ReminderService {
             MealType.POST_DINNER, new String[]{"Post dinner", "#79c4ff"},
             MealType.SWEETS, new String[]{"Sweets", "#ff8fb8"});
 
-    /** The bodywise logo (pink leaf slanting like "/", same as the favicon), drawn as a table of coloured cells. */
+    /** The bodywise logo (pixel apple with a face, same as the favicon), drawn as a table of coloured cells. */
     private static final String[] LOGO = {
-        "................", "...........oooo.", "........ooommmo.", "......oommmmpmo.",
-        ".....ommmmmpmmo.", "....ommmmmpmmmo.", "...ommmmmpmmmo..", "...ommmmpmmmmo..",
-        "..ommmmpmmmmo...", "..ommmpmmmmo....", "..ommpmmmmo.....", "..ompmmmoo......",
-        "..opmooo........", ".opo............", "op..............",
+        ".....nn.....", "....gnng....", "..oooooooo..", ".orrrrrrrro.",
+        "orwrrrrrrwro", "orrkrrrrkrro", "orrrrrrrrrro", "orprrrrrrpro",
+        ".orrrrrrrro.", ".orrrrrrrro.", "..oorrrroo..", "....oooo....",
     };
-    private static final Map<Character, String> LOGO_COLORS = Map.of('o', "#f6eedc", 'm', "#ff4f9a", 'p', "#ff9ec7");
+    private static final Map<Character, String> LOGO_COLORS = Map.of(
+            'o', "#f6eedc", 'n', "#b0723f", 'g', "#6fdc8c", 'r', "#ff6b81", 'w', "#fff8ea", 'k', "#15171c", 'p', "#ff9ec7");
 
     private static String pixelLogo(int px) {
         StringBuilder sb = new StringBuilder("<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse\">");
@@ -181,7 +181,7 @@ public class ReminderService {
 
         // header
         b.append("<tr><td style=\"padding:22px 24px 8px;\"><table cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>")
-         .append("<td valign=\"middle\" style=\"padding-right:14px;\">").append(pixelLogo(3)).append("</td>")
+         .append("<td valign=\"middle\" style=\"padding-right:14px;\">").append(pixelLogo(4)).append("</td>")
          .append("<td valign=\"middle\"><div style=\"").append(font).append("font-size:28px;font-weight:bold;color:").append(PINK).append(";letter-spacing:1px;\">bodywise</div>")
          .append("<div style=\"").append(font).append("font-size:13px;color:").append(MUTED).append(";\">$ grocery --for tomorrow</div></td>")
          .append("</tr></table></td></tr>");
@@ -237,7 +237,7 @@ public class ReminderService {
          .append(";color:#15171c;text-decoration:none;font-weight:bold;font-size:15px;padding:12px 22px;border:3px solid #15171c;border-radius:8px;box-shadow:4px 4px 0 #000;").append(font).append("\">")
          .append("&#9654; tick them off</a></td></tr>")
          .append("<tr><td align=\"center\" style=\"padding:6px 24px 22px;font-size:12px;color:").append(MUTED).append(";\">")
-         .append("sent by bodywise every evening at 7 pm &middot; turn it off in profile</td></tr>")
+         .append("sent by bodywise every evening at 7 pm &middot; <a href=\"" + esc(frontendUrl) + "/grocery\" style=\"color:" + MUTED + ";\">stop these emails</a></td></tr>")
          .append("</table></td></tr></table></body></html>");
         return b.toString();
     }

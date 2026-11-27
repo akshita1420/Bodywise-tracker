@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Pixel } from "@/components/Pixel";
+import FoodTextarea from "@/components/FoodTextarea";
 import Portal from "@/components/Portal";
 import { ParsedPreview, parsedKcal, useParsed } from "@/components/TextEntry";
 import { MacroNumbers, MacroStack, PageHead, Spinner } from "@/components/ui";
@@ -285,13 +286,7 @@ function MealText({
         <span className="text-[12.5px] text-muted">{time}</span>
         <span className="ml-auto text-[13.5px] tabular-nums text-ink-2">{k > 0 ? `${fmt(k)} kcal` : ""}</span>
       </div>
-      <textarea
-        rows={2}
-        className="input w-full resize-y leading-relaxed"
-        placeholder="—"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
+      <FoodTextarea placeholder="start typing, e.g. 2 jowar roti, 1 bowl dal" value={value} onChange={onChange} />
       <ParsedPreview items={items} busy={busy} onDefined={() => setRefresh((n) => n + 1)} />
     </div>
   );

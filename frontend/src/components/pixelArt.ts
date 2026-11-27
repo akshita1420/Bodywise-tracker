@@ -59,6 +59,8 @@ export const SPRITES = {
     "....oooooo..",
   ],
   star: sym([".....o", "....oy", "....oy", "oooooy", "oyyyyy", ".oykyy", "..oyyy", "..oypy", ".oyyoo", ".oyo..", "oyo...", "oo...."]),
+  // apple with closed eyes, for the logo's blink
+  appleBlink: sym([".....n", "....gn", "..oooo", ".orrrr", "orwrrr", "orkkrr", "orrrrr", "orprrr", ".orrrr", ".orrrr", "..oorr", "....oo"]),
   dumbbell: sym(["......", "......", ".oo...", "osso..", "ossooo", "osswww", "ossooo", "osso..", ".oo...", "......", "......", "......"]),
   shoe: [
     "............",

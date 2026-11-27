@@ -6,6 +6,7 @@ import { fmt, pretty } from "@/lib/dates";
 import type { Item, Meal } from "@/lib/types";
 import { MEALS } from "@/lib/types";
 import { Pixel } from "./Pixel";
+import FoodTextarea from "./FoodTextarea";
 import Portal from "./Portal";
 import { ParsedPreview, parsedKcal, useParsed } from "./TextEntry";
 import { MacroNumbers, MacroStack } from "./ui";
@@ -189,17 +190,15 @@ export function MealModal({ meal, date, onClose, onChange }: { meal: Meal; date:
           {adding && (
             <div className="anim-in mt-4">
               <label className="label">type what you ate</label>
-              <textarea
-                autoFocus
-                rows={2}
-                className="input mt-1.5 w-full resize-y leading-relaxed"
-                placeholder="e.g. 2 jowar roti, 1 bowl lauki sabzi, 100 g low fat curd"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) addTyped();
-                }}
-              />
+              <div className="mt-1.5">
+                <FoodTextarea
+                  autoFocus
+                  placeholder="e.g. 2 jowar roti, 1 bowl lauki sabzi, 100 g low fat curd"
+                  value={text}
+                  onChange={setText}
+                  onSubmit={addTyped}
+                />
+              </div>
               <ParsedPreview items={parsed} busy={busy} onDefined={() => setRefresh((n) => n + 1)} />
               <div className="mt-2 flex items-center gap-2">
                 <button className="btn-primary px-3 py-1.5 text-[13px]" disabled={saving || parsed.every((p) => !p.matched)} onClick={addTyped}>

@@ -25,6 +25,15 @@ public class ProfileController {
         return support.profile(support.user(jwt));
     }
 
+    /** Turn the 7 pm grocery email on or off, without touching anything else. Body: {"enabled": false} */
+    @PatchMapping("/reminders")
+    public ProfileDto reminders(@AuthenticationPrincipal Jwt jwt, @RequestBody java.util.Map<String, Boolean> body) {
+        User u = support.user(jwt);
+        u.remindersEnabled = Boolean.TRUE.equals(body.get("enabled"));
+        users.save(u);
+        return support.profile(u);
+    }
+
     @PutMapping
     public ProfileDto update(@AuthenticationPrincipal Jwt jwt, @RequestBody ProfileUpdate p) {
         User u = support.user(jwt);

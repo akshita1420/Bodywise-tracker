@@ -108,7 +108,7 @@ public class GroceryService {
 
         User u = users.findById(userId).orElseThrow();
         String email = u.reminderEmail != null && !u.reminderEmail.isBlank() ? u.reminderEmail : u.email;
-        return new GroceryView(forDate, card != null ? card.title : null, dishes, listDtos, toBuy, mailConfigured(), email);
+        return new GroceryView(forDate, card != null ? card.title : null, dishes, listDtos, toBuy, mailConfigured(), email, u.remindersEnabled);
     }
 
     /** Recipe ingredients of a dish; the food itself when it has none listed; nothing for "" (e.g. water). */

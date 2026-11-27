@@ -5,6 +5,7 @@ import { api } from "@/lib/api";
 import { fmt, pretty } from "@/lib/dates";
 import type { DaySummary, Item, Profile } from "@/lib/types";
 import { Pixel } from "./Pixel";
+import FoodTextarea from "./FoodTextarea";
 import Portal from "./Portal";
 import SugarBuddy from "./SugarBuddy";
 import { ParsedPreview, parsedKcal, useParsed } from "./TextEntry";
@@ -131,13 +132,9 @@ export default function SugarModal({ date, onClose, onSaved }: { date: string; o
             {/* add sweets */}
             <div>
               <label className="label">had something sweet? type it</label>
-              <textarea
-                rows={2}
-                className="input mt-1.5 w-full resize-y leading-relaxed"
-                placeholder="e.g. 1 brownie, 2 chocolate chip cookies, 1 gulab jamun, kulfi"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-              />
+              <div className="mt-1.5">
+                <FoodTextarea placeholder="e.g. 1 brownie, 2 chocolate chip cookies, 1 gulab jamun, kulfi" value={text} onChange={setText} />
+              </div>
               <ParsedPreview items={parsed} busy={busy} onDefined={() => setRefresh((n) => n + 1)} />
               <button
                 className="btn-primary mt-2"

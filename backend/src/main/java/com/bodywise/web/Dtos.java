@@ -172,7 +172,7 @@ public final class Dtos {
     public record ListDto(Long id, String name, List<GItemDto> items) {}
     public record ToBuy(String source, String name, String quantity) {}
     public record GroceryView(LocalDate forDate, String planTitle, List<GroceryDish> dishes, List<ListDto> lists,
-                              List<ToBuy> toBuy, boolean mailConfigured, String reminderEmail) {}
+                              List<ToBuy> toBuy, boolean mailConfigured, String reminderEmail, boolean remindersEnabled) {}
     public record PlanCheck(@NotNull LocalDate date, @NotBlank String key, boolean purchased) {}
     public record NameRequest(@NotBlank String name) {}
     public record GItemRequest(@NotBlank String name, String quantity) {}

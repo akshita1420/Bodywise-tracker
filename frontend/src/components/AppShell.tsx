@@ -156,13 +156,19 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** Pink pixel logo: a leaf slanting like "/", plus the wordmark (same mark as the favicon). */
+/** Logo: the pixel apple (same as the favicon). It stays still and only blinks now and then. */
 export function Logo({ small = false }: { small?: boolean }) {
+  const [blink, setBlink] = useState(false);
+  useEffect(() => {
+    const id = setInterval(() => {
+      setBlink(true);
+      setTimeout(() => setBlink(false), 180);
+    }, 3800);
+    return () => clearInterval(id);
+  }, []);
   return (
     <span className="flex items-center gap-2">
-      <span className="pixel-bob">
-        <Pixel name="logoLeaf" size={small ? 26 : 34} title="bodywise" />
-      </span>
+      <Pixel name={blink ? "appleBlink" : "apple"} size={small ? 26 : 34} title="bodywise" />
       <span className={`font-pixel leading-none text-pink ${small ? "text-[20px]" : "text-[27px]"}`}>bodywise</span>
     </span>
   );

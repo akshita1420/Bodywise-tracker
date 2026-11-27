@@ -245,6 +245,8 @@ export interface GroceryView {
   toBuy: { source: string; name: string; quantity: string | null }[];
   mailConfigured: boolean;
   reminderEmail: string;
+  /** the 7 pm email is on for this account */
+  remindersEnabled: boolean;
 }
 
 export interface Exercise {
